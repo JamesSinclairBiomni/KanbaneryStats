@@ -1,6 +1,28 @@
 ﻿@page "/"
+@inject HttpClient Http
 
 <h1>Hello, world!</h1>
 
-Welcome to your new app.
+<p>Welcome to your new app.</p>
 
+<p>
+    <input type="text" bind="@apiToken" />
+    <button onclick="@Refresh">Refresh data from Kanbanery</button>
+    <br />
+    <span class="small">Last updated: @lastUpdatedDateTime</span>
+</p>
+
+@functions {
+    private DateTime lastUpdatedDateTime;
+    private string apiToken;
+
+    protected override async Task OnInitAsync()
+    {
+        lastUpdatedDateTime = await Http.GetJsonAsync<DateTime>("api/Stats/lastupdated");
+    }
+
+    private async void Refresh()
+    {
+        lastUpdatedDateTime = await Http.GetJsonAsync<DateTime>($"api/Stats/refresh?apiToken={apiToken}");
+    }
+}
