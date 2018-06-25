@@ -52,9 +52,13 @@ namespace KanbaneryStats.Server.Controllers
         {
             var contentRoot = hostingEnvironment.ContentRootPath;
 
-            var doneKanbaneryTasks = GetKanbaneryTasksForColumn(doneColumnId, apiToken);
-            var qaKanbaneryTasks = GetKanbaneryTasksForColumn(qaColumnId, apiToken);
-            var readyForQaKanbaneryTasks = GetKanbaneryTasksForColumn(readyForQaColumnId, apiToken);
+            if (client.DefaultRequestHeaders.Contains("X-KANBANERY-APITOKEN"))
+                client.DefaultRequestHeaders.Remove("X-KANBANERY-APITOKEN");
+            client.DefaultRequestHeaders.Add("X-KANBANERY-APITOKEN", apiToken);
+
+            var doneKanbaneryTasks = GetKanbaneryTasksForColumn(doneColumnId);
+            var qaKanbaneryTasks = GetKanbaneryTasksForColumn(qaColumnId);
+            var readyForQaKanbaneryTasks = GetKanbaneryTasksForColumn(readyForQaColumnId);
 
             var tasks = doneKanbaneryTasks.Where(t => t.EstimateId != null).ToList();
             tasks.AddRange(qaKanbaneryTasks.Where(t => t.EstimateId != null));
@@ -63,12 +67,12 @@ namespace KanbaneryStats.Server.Controllers
             var taskInfos = new List<TaskInfo>();
             foreach (var task in tasks) 
             {
-                var estimate = GetKanbaneryEstimate(task.EstimateId.Value, apiToken);
-                var actual = GetKanbaneryTaskFields(task.Id, apiToken).Where(t => t.ProjectFieldId == actualProjectFieldId).ToList();
+                var estimate = GetKanbaneryEstimate(task.EstimateId.Value);
+                var actual = GetKanbaneryTaskFields(task.Id).Where(t => t.ProjectFieldId == actualProjectFieldId).ToList();
 
                 if (actual.Any())
                 {
-                    taskInfos.Add(new TaskInfo { Title = task.Title, Estimate = estimate.Value, Actual = actual.Single().Value });
+                    taskInfos.Add(new TaskInfo { Title = task.Title, Estimate = estimate.Value, Actual = double.Parse(actual.Single().Value) });
                 }
             }
 
@@ -77,9 +81,8 @@ namespace KanbaneryStats.Server.Controllers
             return System.IO.File.GetLastWriteTime($"{contentRoot}/data/taskinfo.json");
         }
         
-        private List<KanbaneryTask> GetKanbaneryTasksForColumn(int columnId, string apiToken)
+        private List<KanbaneryTask> GetKanbaneryTasksForColumn(int columnId)
         {
-            client.DefaultRequestHeaders.Add("X-KANBANERY-APITOKEN", apiToken);
             var data = client.GetStringAsync($"{baseKanbaneryUrl}columns/{columnId}/tasks.json").GetAwaiter().GetResult();
 
             var kanbaneryTasks = JsonConvert.DeserializeObject<List<KanbaneryTask>>(data);
@@ -87,9 +90,8 @@ namespace KanbaneryStats.Server.Controllers
             return kanbaneryTasks;
         }
 
-        private KanbaneryEstimate GetKanbaneryEstimate(int estimateId, string apiToken)
+        private KanbaneryEstimate GetKanbaneryEstimate(int estimateId)
         {
-            client.DefaultRequestHeaders.Add("X-KANBANERY-APITOKEN", apiToken);
             var data = client.GetStringAsync($"{baseKanbaneryUrl}estimates/{estimateId}.json").GetAwaiter().GetResult();
 
             var kanbaneryEstimate = JsonConvert.DeserializeObject<KanbaneryEstimate>(data);
@@ -97,9 +99,8 @@ namespace KanbaneryStats.Server.Controllers
             return kanbaneryEstimate;
         }
 
-        private List<KanbaneryTaskField> GetKanbaneryTaskFields(int taskId, string apiToken)
+        private List<KanbaneryTaskField> GetKanbaneryTaskFields(int taskId)
         {
-            client.DefaultRequestHeaders.Add("X-KANBANERY-APITOKEN", apiToken);
             var data = client.GetStringAsync($"{baseKanbaneryUrl}tasks/{taskId}/addons/task_fields.json").GetAwaiter().GetResult();
 
             var kanbaneryTaskFields = JsonConvert.DeserializeObject<List<KanbaneryTaskField>>(data);

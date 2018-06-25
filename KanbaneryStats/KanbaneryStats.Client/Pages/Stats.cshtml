@@ -33,6 +33,9 @@ else
             }
         </tbody>
     </table>
+
+    <span>Total records: @taskInfos.Count()</span><br />
+    <span>Sum of Actuals / Sum of Estimates: @(taskInfos.Sum(x => x.Actual) / @taskInfos.Sum(x => x.Estimate))</span>
 }
 
 @functions {
