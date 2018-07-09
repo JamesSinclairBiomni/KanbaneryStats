@@ -1,28 +1,54 @@
-﻿@page "/"
+﻿@using KanbaneryStats.Shared
+@page "/"
 @inject HttpClient Http
 
-<h1>KanbaneryStats</h1>
+<h1>Velocity Stats</h1>
 
-<p>Welcome to your new app.</p>
+<p>Data in the table below covers stories from the 'Development - Next' board in Kanbanery. Only stories in 'Ready for QA', 'QA' and 'Done' are included. The stories must have an 'Estimate' and an 'Actual days' value.</p>
 
-<p>
-    <input type="text" bind="@apiToken" />
-    <button onclick="@Refresh">Refresh data from Kanbanery</button>
-    <br />
-    <span class="small">Last updated: @lastUpdatedDateTime</span>
-</p>
+@if (taskInfos == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Estimate (Pair days)</th>
+                <th>Actual (Pair days)</th>
+                <th>Factor</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var taskInfo in taskInfos)
+            {
+                <tr>
+                    <td>@taskInfo.Title</td>
+                    <td>@taskInfo.Estimate</td>
+                    <td>@taskInfo.Actual</td>
+                    <td>@taskInfo.Factor</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p>
+        <span>Total records: @taskInfos.Count()</span><br />
+        <span>Sum of Actuals / Sum of Estimates: @(taskInfos.Sum(x => x.Actual) / @taskInfos.Sum(x => x.Estimate))</span>
+    </p>
+}
+
+<span class="small">Last updated: @lastUpdatedDateTime</span>
 
 @functions {
+    TaskInfo[] taskInfos;
     private DateTime lastUpdatedDateTime;
-    private string apiToken;
 
     protected override async Task OnInitAsync()
     {
         lastUpdatedDateTime = await Http.GetJsonAsync<DateTime>("api/Stats/lastupdated");
-    }
-
-    private async void Refresh()
-    {
-        lastUpdatedDateTime = await Http.GetJsonAsync<DateTime>($"api/Stats/refresh?apiToken={apiToken}");
+        taskInfos = await Http.GetJsonAsync<TaskInfo[]>("api/Stats/TaskInfo");
     }
 }

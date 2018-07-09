@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KanbaneryStats.Server", "KanbaneryStats.Server\KanbaneryStats.Server.csproj", "{63612D00-789C-4A7A-AAC3-65A1875D95C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KanbaneryStats.Server", "KanbaneryStats.Server\KanbaneryStats.Server.csproj", "{63612D00-789C-4A7A-AAC3-65A1875D95C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KanbaneryStats.Client", "KanbaneryStats.Client\KanbaneryStats.Client.csproj", "{30F608B8-4334-432D-8752-A8F29FD3BE93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KanbaneryStats.Client", "KanbaneryStats.Client\KanbaneryStats.Client.csproj", "{30F608B8-4334-432D-8752-A8F29FD3BE93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KanbaneryStats.Shared", "KanbaneryStats.Shared\KanbaneryStats.Shared.csproj", "{E00A872F-AD16-46DE-80D9-E07A6C0BDAA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KanbaneryStats.Shared", "KanbaneryStats.Shared\KanbaneryStats.Shared.csproj", "{E00A872F-AD16-46DE-80D9-E07A6C0BDAA4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

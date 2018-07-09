@@ -1,0 +1,43 @@
+﻿@page "/update"
+@inject HttpClient Http
+
+<h1>Update data</h1>
+
+<p>Enter a valid Kanbanery Api token below and click to refresh/update the data.</p>
+
+<p>
+    @if (refreshing)
+    {
+        <span>Refreshing data...</span>
+    }
+    else
+    {
+        <input type="text" bind="@apiToken" />
+        <button onclick="@Refresh">Refresh data from Kanbanery</button>
+    }
+
+    <br />
+    <span class="small">Last updated: @lastUpdatedDateTime</span>
+</p>
+
+@functions {
+    private DateTime lastUpdatedDateTime;
+    private string apiToken;
+    private bool refreshing = false;
+
+    protected override async Task OnInitAsync()
+    {
+        lastUpdatedDateTime = await Http.GetJsonAsync<DateTime>("api/Stats/lastupdated");
+    }
+
+    private async void Refresh()
+    {
+        refreshing = !refreshing;
+        this.StateHasChanged();
+
+        lastUpdatedDateTime = await Http.GetJsonAsync<DateTime>($"api/Stats/refresh?apiToken={apiToken}");
+
+        refreshing = !refreshing;
+        this.StateHasChanged();
+    }
+}

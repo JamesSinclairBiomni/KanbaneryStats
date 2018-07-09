@@ -1,0 +1,9 @@
+﻿@page "/about"
+
+<h1>About</h1>
+
+<p>The site works like this, you enter your Kanbanery API Token and click refresh. The server talks to the Kanbanery Api and pulls all the stories from 'Ready for QA', 'QA' and 'Done'. It filters those down to only ones with 'Estimates' and 'Actual days' specified. That data is then written into a text file on disk.</p>
+
+<p>When you're viewing the stats table the client is making a REST call to the server, which opens the text file and returns it data along with the last modified date from the file.</p>
+
+<p>This site uses <a href="http://blazor.net" target="_blank" class="ml-md-auto">Blazor</a> to run .Net razor view in the browser and .Net core to provide the server.</p>
