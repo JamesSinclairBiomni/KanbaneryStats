@@ -28,7 +28,7 @@
 
             //Console.WriteLine($"{i}: factor:{taskInfos[i].Factor}, runningTotal:{runningTotal}, AverageFactor:{averageFactor}");
 
-            data.Add(new { MovedAt = taskInfos[i].MovedAt, AverageFactor = averageFactor });
+            data.Add(new { MovedAt = taskInfos[i].MovedAt, Factor = taskInfos[i].Factor, AverageFactor = averageFactor });
         }
 
         RegisteredFunction.Invoke<bool>("drawChart", new[] { data.ToArray() });
