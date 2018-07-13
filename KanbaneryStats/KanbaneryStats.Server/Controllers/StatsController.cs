@@ -36,7 +36,7 @@ namespace KanbaneryStats.Server.Controllers
             var json = System.IO.File.ReadAllText($"{contentRoot}/data/taskinfo.json");
             var taskInfos = JsonConvert.DeserializeObject<List<TaskInfo>>(json);
          
-            return taskInfos;
+            return taskInfos.OrderBy(t => t.MovedAt);
         }
 
         [HttpGet("[action]")]

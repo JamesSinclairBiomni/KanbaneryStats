@@ -11,15 +11,14 @@
 <span class="small">Last updated: @lastUpdatedDateTime</span>
 
 @functions {
-    //private TaskInfo[] taskInfos;
+    private TaskInfo[] taskInfos;
     private DateTime lastUpdatedDateTime;
 
     protected override async Task OnInitAsync()
     {
         lastUpdatedDateTime = await Http.GetJsonAsync<DateTime>("api/stats/lastupdated");
-        //taskInfos = await Http.GetJsonAsync<TaskInfo[]>("api/stats/taskinfo");
+        taskInfos = await Http.GetJsonAsync<TaskInfo[]>("api/stats/taskinfo");
 
-        RegisteredFunction.Invoke<bool>("drawChart");
+        RegisteredFunction.Invoke<bool>("drawChart", new[] { taskInfos });
     }
-
 }
