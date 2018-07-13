@@ -72,7 +72,7 @@ namespace KanbaneryStats.Server.Controllers
 
                 if (actual.Any())
                 {
-                    taskInfos.Add(new TaskInfo { Title = task.Title, Estimate = estimate.Value, Actual = double.Parse(actual.Single().Value) });
+                    taskInfos.Add(new TaskInfo { Title = task.Title, Estimate = estimate.Value, Actual = double.Parse(actual.Single().Value), MovedAt = task.MovedAt });
                 }
             }
 

@@ -1,0 +1,55 @@
+﻿@page "/stats"
+@inject HttpClient Http
+
+<h1>Velocity Stats</h1>
+
+<p>Data in the table below covers stories from the 'Development - Next' board in Kanbanery. Only stories in 'Ready for QA', 'QA' and 'Done' are included. The stories must have an 'Estimate' and an 'Actual days' value.</p>
+
+@if (taskInfos == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Estimate (Pair days)</th>
+                <th>Actual (Pair days)</th>
+                <th>Factor</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var taskInfo in taskInfos)
+            {
+                <tr>
+                    <td>@taskInfo.Title</td>
+                    <td>@taskInfo.MovedAt</td>
+                    <td>@taskInfo.Estimate</td>
+                    <td>@taskInfo.Actual</td>
+                    <td>@taskInfo.Factor</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p>
+        <span>Total records: @taskInfos.Count()</span><br />
+        <span>Sum of Actuals / Sum of Estimates: @(taskInfos.Sum(x => x.Actual) / taskInfos.Sum(x => x.Estimate))</span>
+    </p>
+}
+
+<span class="small">Last updated: @lastUpdatedDateTime</span>
+
+@functions {
+    private TaskInfo[] taskInfos;
+    private DateTime lastUpdatedDateTime;
+
+    protected override async Task OnInitAsync()
+    {
+        lastUpdatedDateTime = await Http.GetJsonAsync<DateTime>("api/stats/lastupdated");
+        taskInfos = await Http.GetJsonAsync<TaskInfo[]>("api/stats/taskinfo");
+    }
+}

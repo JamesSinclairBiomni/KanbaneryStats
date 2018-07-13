@@ -7,6 +7,7 @@ namespace KanbaneryStats.Shared
     public class TaskInfo
     {
         public string Title { get; set; }
+        public DateTime MovedAt { get; set; }
         public double Estimate { get; set; }
         public double Actual { get; set; }
         public double Factor => Actual/Estimate;

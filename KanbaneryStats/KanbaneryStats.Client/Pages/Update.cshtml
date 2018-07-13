@@ -27,7 +27,7 @@
 
     protected override async Task OnInitAsync()
     {
-        lastUpdatedDateTime = await Http.GetJsonAsync<DateTime>("api/Stats/lastupdated");
+        lastUpdatedDateTime = await Http.GetJsonAsync<DateTime>("api/stats/lastupdated");
     }
 
     private async void Refresh()
