@@ -6,15 +6,16 @@
 
     google.charts.setOnLoadCallback(() => {
 
-        var result = dataItems.map(a => [new Date(a.movedAt), a.factor]);
-        result.splice(0, 0, ['Date', 'Velocity']);
+        var result = dataItems.map(a => [new Date(a.movedAt), a.averageFactor]);
+        result.splice(0, 0, ['Date', 'Average Velocity']);
         var data = google.visualization.arrayToDataTable(result, false);
 
         var options = {
             chart: {
-                title: 'Velocity over time',
-                subtitle: 'actual / estimate'
+                title: 'Velocity',
+                subtitle: 'graph of the average velocity over time'
             },
+            curveType: 'function',
             width: 900,
             height: 500
         };

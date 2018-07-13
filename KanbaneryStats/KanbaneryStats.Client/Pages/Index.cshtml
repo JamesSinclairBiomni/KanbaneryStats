@@ -19,6 +19,18 @@
         lastUpdatedDateTime = await Http.GetJsonAsync<DateTime>("api/stats/lastupdated");
         taskInfos = await Http.GetJsonAsync<TaskInfo[]>("api/stats/taskinfo");
 
-        RegisteredFunction.Invoke<bool>("drawChart", new[] { taskInfos });
+        double runningTotal = 0;
+        var data = new List<dynamic>();
+        for (int i = 0; i < taskInfos.Length; i++)
+        {
+            runningTotal += taskInfos[i].Factor;
+            double averageFactor = runningTotal / (i + 1);
+
+            //Console.WriteLine($"{i}: factor:{taskInfos[i].Factor}, runningTotal:{runningTotal}, AverageFactor:{averageFactor}");
+
+            data.Add(new { MovedAt = taskInfos[i].MovedAt, AverageFactor = averageFactor });
+        }
+
+        RegisteredFunction.Invoke<bool>("drawChart", new[] { data.ToArray() });
     }
 }
