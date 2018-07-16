@@ -3,28 +3,25 @@
     console.log(dataItems);
 
     google.charts.load('current', {
-        'packages': ['line']
+        'packages': ['corechart']
     });
 
     google.charts.setOnLoadCallback(() => {
 
-        var result = dataItems.map(a => [new Date(a.movedAt), a.factor, a.averageFactor]);
-        result.splice(0, 0, ['Date', 'Individual Factors', 'Average Factors']);
+        var result = dataItems.map(a => [new Date(a.movedAt), a.factor]);
+        result.splice(0, 0, ['Date', 'Velocity']);
         var data = google.visualization.arrayToDataTable(result, false);
 
         var options = {
-            chart: {
-                title: 'Velocity',
-                subtitle: 'graph of the average velocity over time'
-            },
-            curveType: 'function',
+            title: 'Velocity over Time',
             width: 1000,
-            height: 700
+            height: 700,
+            trendlines: { 0: {} }    // Draw a trendline for data series 0.
         };
 
-        var chart = new google.charts.Line(document.getElementById('linechart_material'));
-
-        chart.draw(data, google.charts.Line.convertOptions(options));
+        var chart = new google.visualization.ScatterChart(document.getElementById('linechart_material'));
+        
+        chart.draw(data, options);
     });    
     
     return true;
