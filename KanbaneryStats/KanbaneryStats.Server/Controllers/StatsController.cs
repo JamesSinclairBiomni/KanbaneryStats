@@ -18,10 +18,10 @@ namespace KanbaneryStats.Server.Controllers
         private readonly IHostingEnvironment hostingEnvironment;
         private static readonly HttpClient client = new HttpClient();
 
-        private const int doneColumnId = 488704;
-        private const int qaColumnId = 488709;
-        private const int readyForQaColumnId = 493712;
-        private const int actualProjectFieldId = 943;
+        private const int doneColumnId = 524187;
+        private const int qaColumnId = 524185;
+        private const int readyForQaColumnId = 524184;
+        private const int actualProjectFieldId = 978;
         private const string baseKanbaneryUrl = "https://biomni.kanbanery.com/api/v1/";
 
         public StatsController(IHostingEnvironment hostingEnvironment)
